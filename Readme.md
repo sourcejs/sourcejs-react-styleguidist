@@ -43,19 +43,17 @@ See Configuration section below for the list of available options.
 
 Examples are written in Markdown where any code blocks will be rendered as a react components. By default any `readme.md` in the component folder is treated as an examples file but you can change it with the `getExampleFilename` option.
 
-```markdown
-React component example:
-
-&#96;``jsx
-<Button size="large">Push Me</Button>
-&#96;``
-
-Any [Markdown](http://daringfireball.net/projects/markdown/):
-
-* Foo;
-* bar;
-* baz.
-```
+	React component example:
+	
+	```jsx
+	<Button size="large">Push Me</Button>
+	```
+	
+	Any [Markdown](http://daringfireball.net/projects/markdown/):
+	
+	* Foo;
+	* bar;
+	* baz.
 
 ## Configuration
 
