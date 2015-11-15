@@ -17,7 +17,7 @@ var processRequest = function (req, res, next) {
     if (req.specData && req.specData.renderedHtml && req.specData.info.role !== 'navigation') {
 		var append;
 
-		if (process.env.NODE_ENV === 'development') {
+		if (global.MODE === 'development') {
 			append = '<script src="/'+ config.bundlePath +'"></script>'
 		} else {
 			append = '<link rel="stylesheet" href="/build/styleguide/build/styles.css"><script src="/build/styleguide/' + config.bundlePath + '"></script>'

@@ -1,7 +1,7 @@
 var express = require('express');
 var webpack = require('webpack');
 var makeWebpackConfig = require('../src/make-webpack-config.js');
-var env = process.env.NODE_ENV;
+var env = global.MODE || process.env.NODE_ENV;
 var compiler = webpack(makeWebpackConfig(env));
 
 if (env === 'development') {
@@ -14,7 +14,5 @@ if (env === 'development') {
 		if (err) {
 			console.log(err, stats);
 		}
-
-		console.log(stats);
 	});
 }
