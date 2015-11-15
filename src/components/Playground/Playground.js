@@ -1,14 +1,14 @@
 import { Component, PropTypes } from 'react';
 import Editor from 'components/Editor';
 import Preview from 'components/Preview';
-
-import s from './Playground.css';
+import ReactDOM from 'react-dom';
 
 export default class Playground extends Component {
 	static propTypes = {
 		highlightTheme: PropTypes.string.isRequired,
 		code: PropTypes.string.isRequired,
 		evalInContext: PropTypes.func.isRequired,
+		index: PropTypes.string.isRequired
 	}
 
 	constructor(props) {
@@ -24,6 +24,14 @@ export default class Playground extends Component {
 		});
 	}
 
+	componentDidMount() {
+		this.renderEditor(this.props);
+	}
+
+	componentDidUpdate() {
+		this.renderEditor(this.props);
+	}
+
 	componentWillReceiveProps(nextProps) {
 		let { code } = nextProps;
 		if (code) {
@@ -33,19 +41,32 @@ export default class Playground extends Component {
 		}
 	}
 
-	render() {
-		let { code } = this.state;
+	getEditorContainer() {
+		return document.querySelector('.source_styleguidist_code__' + this.props.index);
+	}
+
+	getEditorElement() {
 		let { highlightTheme } = this.props;
+		let { code } = this.state;
 
 		return (
-			<div className={s.root}>
-				<div className={s.preview}>
-					<Preview code={code} evalInContext={this.props.evalInContext}/>
-				</div>
-				<div className={s.editor}>
-					<Editor code={code} highlightTheme={highlightTheme} onChange={this.handleChange}/>
-				</div>
-			</div>
+			<Editor code={code} highlightTheme={highlightTheme} onChange={this.handleChange}/>
+		);
+	}
+
+	renderEditor() {
+		var container = this.getEditorContainer();
+
+		if (container) {
+			ReactDOM.unstable_renderSubtreeIntoContainer(this, this.getEditorElement(), this.getEditorContainer());
+		}
+	}
+
+	render() {
+		let { code } = this.state;
+
+		return (
+			<Preview code={code} evalInContext={this.props.evalInContext}/>
 		);
 	}
 }

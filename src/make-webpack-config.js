@@ -1,7 +1,6 @@
 var fs = require('fs');
 var path = require('path');
 var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var AdvancedVariables = require('postcss-advanced-variables');
 var merge = require('webpack-merge');
@@ -30,7 +29,8 @@ module.exports = function(env) {
 	var webpackConfig = {
 		output: {
 			path: config.styleguideDir,
-			filename: 'build/bundle.js'
+			publicPath: '/',
+			filename: config.bundlePath
 		},
 		resolve: {
 			root: path.join(__dirname),
@@ -51,11 +51,6 @@ module.exports = function(env) {
 			]
 		},
 		plugins: [
-			new HtmlWebpackPlugin({
-				title: config.title,
-				template: config.template,
-				inject: true
-			}),
 			new webpack.DefinePlugin({
 				'process.env': {
 					NODE_ENV: JSON.stringify(env)

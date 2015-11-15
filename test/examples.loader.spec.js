@@ -70,17 +70,6 @@ describe('examples loader', () => {
 		});
 	});
 
-	describe('readExamples', () => {
-		it('should separate code and html chunks', () => {
-			let examplesMarkdown = '# header\n\n    <div />\n\ntext';
-			let examples = examplesLoader.readExamples(examplesMarkdown);
-			expect(examples).to.have.length(3);
-			expect(examples[0].type).to.equal('html');
-			expect(examples[1].type).to.equal('code');
-			expect(examples[2].type).to.equal('html');
-		});
-	});
-
 	describe('loader', () => {
 		it('should return valid, parsable js', () => {
 			let exampleMarkdown = '# header\n\n    <div />\n\ntext';

@@ -1,58 +1,80 @@
-var fs = require('fs');
 var path = require('path');
-var findup = require('findup');
+var fs = require('fs');
 var minimist = require('minimist');
 var prettyjson = require('prettyjson');
-var _ = require('lodash');
 var utils = require('./server');
+var _ = require('lodash');
 
-var CONFIG_FILENAME = 'styleguide.config.js';
-var DEFAULT_CONFIG = {
-	rootDir: null,
-	components: null,
-	title: 'Style guide',
-	styleguideDir: 'styleguide',
-	template: path.join(__dirname, '../templates/index.html'),
-	serverHost: 'localhost',
-	serverPort: 3000,
+var sourceJSUtils;
+var globalConfig;
+var pathToSourceJSUser = '';
+
+if (global.pathToApp) {
+	sourceJSUtils = require(path.join(global.pathToApp, 'core/lib/utils'));
+	globalConfig = global.opts.plugins && global.opts.plugins.reactStyleguidist ? global.opts.plugins.reactStyleguidist : {};
+
+	pathToSourceJSUser = global.userPath;
+}
+
+var config = {
+	enabled: true,
+	bundlePath: 'build/bundle.js',
+
+	// Public object is exposed to Front-end via options API.
+	public: {},
+
+	// Original styleguidist options
+	rootDir: path.join(pathToSourceJSUser, 'specs'),
+	components: './**/*.js',
+	styleguideDir: path.join(pathToSourceJSUser, 'build/styleguide'),
+
 	highlightTheme: 'base16-light',
 	verbose: false,
 	getExampleFilename: function(componentpath) {
-		return path.join(path.dirname(componentpath), 'Readme.md');
+		return path.join(path.dirname(componentpath), 'readme.md');
 	},
 	updateWebpackConfig: null
+
+	// Not used in SourceJS integration
+	// title: 'Style guide',
+	// template: path.join(__dirname, '../templates/index.html'),
+	// serverHost: 'localhost',
+	// serverPort: 3000,
 };
+
+if (sourceJSUtils) {
+	sourceJSUtils.extendOptions(config, globalConfig);
+}
 
 function readConfig() {
 	var argv = minimist(process.argv.slice(2));
 	var configFilepath = findConfig(argv);
+	var customConfig = {};
+	var options = config;
 
-	var options = require(configFilepath);
+	if (configFilepath) {
+		customConfig = require(configFilepath);
+	}
+
+	options = _.merge({}, options, customConfig);
+
+	if (customConfig) {
+		options.rootDir = path.resolve(path.dirname(configFilepath), options.rootDir);
+	}
 
 	validateConfig(options);
 
-	var configDir = path.dirname(configFilepath);
-	var rootDir = path.resolve(configDir, options.rootDir);
-
-	if (rootDir === configDir) {
-		throw Error('Styleguidist: "rootDir" should not point to a folder with the Styleguidist config and node_modules folder');
-	}
-	if (!utils.isDirectoryExists(rootDir)) {
-		throw Error('Styleguidist: "rootDir" directory not found: ' + rootDir);
-	}
-
-	options = _.merge({}, DEFAULT_CONFIG, options);
-	options = _.merge({}, options, {
-		verbose: !!argv.verbose,
-		rootDir: rootDir,
-		styleguideDir: path.resolve(configDir, options.styleguideDir)
-	});
-
 	if (options.verbose) {
 		console.log();
-		console.log('Using config file:', configFilepath);
 		console.log(prettyjson.render(options));
 		console.log();
+	}
+
+	if (options.rootDir === global.userPath) {
+		throw Error('Styleguidist: "rootDir" should not point to folder with node_modules');
+	}
+	if (!utils.isDirectoryExists(options.rootDir)) {
+		throw Error('Styleguidist: "rootDir" directory not found: ' + options.rootDir);
 	}
 
 	return options;
@@ -68,19 +90,6 @@ function findConfig(argv) {
 		}
 
 		return configFilepath;
-	}
-	else {
-		// Search config file in all parent directories
-
-		var configDir;
-		try {
-			configDir = findup.sync(__dirname, CONFIG_FILENAME);
-		}
-		catch (e) {
-			throw Error('Styleguidist config not found: ' + CONFIG_FILENAME + '.');
-		}
-
-		return path.join(configDir, CONFIG_FILENAME);
 	}
 }
 
