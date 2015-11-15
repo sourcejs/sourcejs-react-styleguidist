@@ -44,16 +44,31 @@ See Configuration section below for the list of available options.
 Examples are written in Markdown where any code blocks will be rendered as a react components. By default any `readme.md` in the component folder is treated as an examples file but you can change it with the `getExampleFilename` option.
 
 	React component example:
-	
+
 	```jsx
 	<Button size="large">Push Me</Button>
 	```
-	
+
 	Any [Markdown](http://daringfireball.net/projects/markdown/):
-	
+
 	* Foo;
 	* bar;
 	* baz.
+
+## How it works
+
+SourceJS plugins are loaded together with main applications, adding additional initialization steps or changing rendering flow using middleware integration. With this plugin, in development mode, SourceJS in enhanced with webpack middleware, that builds all the React examples on demand and listens to file changes for hot-reloading.
+
+Running app with `NODE_ENV=production`, webpack will be triggered only once to build a static, minified version, which is done also on app start.
+
+Rendering flow with this plugins looks like this:
+
+* On app start `webpack-dev-middleware` and `webpack-hot-middleware` are loaded from `core/index.js`
+* Then happens initial build of `bundle.js` which packs all the components and development tools into one package
+* Using custom loaders, webpack gathers info about all component from `readme.md` files, and saves defined code examples
+* On Spec page request, common `bundle.js` is loaded onto every page, loading only examples of defined spec
+* To determine which component to load from common bundle, all examples are grouped by Spec name, and special middleware (`code/middleware/index.js`) during rendering flow replaces code examples from `readme.md` with special hooks, that are then used as roots to React components
+* Using SourceJS as a platform together with this integration plugin you get benefits both from SourceJS ecosystem, and custom client-side rendreding handled by react/webpack and hot module replacement tool
 
 ## Configuration
 
