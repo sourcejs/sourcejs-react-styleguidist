@@ -12,7 +12,6 @@ function processComponent(filepath) {
 			'filepath: ' + JSON.stringify(filepath),
 			'relativePath: ' + JSON.stringify(path.relative(config.rootDir, filepath)),
 			'module: ' + requireIt(filepath),
-			'props: ' + requireIt('!!props!' + filepath),
 			'examples: ' + (hasExamples ? requireIt('examples!' + examplesFile) : null)
 		].join(',') + '}';
 }
@@ -40,7 +39,14 @@ module.exports.pitch = function() {
 		console.log();
 	}
 
-	var components = componentSources.map(processComponent);
+	var specPah;
+	var specId;
+	var components = componentSources.map(function(item){
+		specPah = config.getExampleFilename(item);
+		specId = path.dirname(specPah.replace(global.userPath, '')).replace(/^\//, '').toLowerCase();
+
+		return '"' + specId + '":' + processComponent(item);
+	});
 
 	var simplifiedConfig = _.pick(config, [
 		'title',
@@ -50,7 +56,7 @@ module.exports.pitch = function() {
 	return [
 		'module.exports = {',
 		'	config: ' + JSON.stringify(simplifiedConfig) + ',',
-		'	components: [' + components.join(',') + ']',
+		'	components: {' + components.join(',') + '}',
 		'};'
 	].join('\n');
 };

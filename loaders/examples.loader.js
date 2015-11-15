@@ -2,39 +2,25 @@ var _ = require('lodash');
 var marked = require('marked');
 
 var evalPlaceholder = '<%{#eval#}%>';
-var codePlaceholder = '<%{#code#}%>';
 
 var requireAnythingRegex = /require\s*\(([^)]+)\)/g;
 var simpleStringRegex = /^"([^"]+)"$|^'([^']+)'$/;
 
 function readExamples(markdown) {
 	var codeChunks = [];
-
 	var renderer = new marked.Renderer();
-	renderer.heading = function(text, level, raw) {
-		var tag = 'h' + (level + 2);
-		return '<' + tag + '>' + text + '</' + tag + '>\n';
+
+	renderer.code = function(code, language) {
+		if (language && language === 'jsx') {
+			codeChunks.push({type: 'code', content: code, evalInContext: evalPlaceholder});
+        }
+
+		return code;
 	};
-	renderer.code = function(code) {
-		codeChunks.push(code);
-		return codePlaceholder;
-	};
 
-	var html = marked(markdown, {renderer: renderer});
+	marked(markdown, {renderer: renderer});
 
-	var chunks = [];
-	var textChunks = html.split(codePlaceholder);
-	textChunks.forEach(function(chunk) {
-		if (chunk) {
-			chunks.push({type: 'html', content: chunk});
-		}
-		var code = codeChunks.shift();
-		if (code) {
-			chunks.push({type: 'code', content: code, evalInContext: evalPlaceholder});
-		}
-	});
-
-	return chunks;
+	return codeChunks;
 }
 
 // Returns a list of all strings used in require(...) calls in the given source code.
