@@ -1,57 +1,54 @@
-# React Styleguidist :skull: work in progress :skull:
+# React Styleguidist Integration Plugin for SourceJS
 
-[![Build Status](https://travis-ci.org/sapegin/react-styleguidist.svg)](https://travis-ci.org/sapegin/react-styleguidist)
+[![Build Status](https://travis-ci.org/sourcejs/sourcejs-react-styleguidist.svg?branch=master)](https://travis-ci.org/sourcejs/sourcejs-react-styleguidist)
 
-React components style guide generator with a hot reloaded (style guide) dev server.
+Fork of React Style Guide generator [react-styleguidist](https://github.com/sapegin/react-styleguidist) with integration to [SourceJS](http://sourcejs.com) platform.
 
-[Example style guide](http://sapegin.github.io/react-styleguidist/).
+[Original styleguidist example](http://sapegin.github.io/react-styleguidist/).
+(example with SourceJS will be available later)
 
 ![](https://s3.amazonaws.com/f.cl.ly/items/3i0E1D1L1c1m1s2G1d0y/Screen%20Recording%202015-09-24%20at%2009.49%20AM.gif)
+
+To add automatically generated React props docs use [sourcejs-react-docgen](https://github.com/sourcejs/sourcejs-react-docgen) plugin. Check [SourceJS React bundle example](http://github.com/sourcejs/react-styleguidist-example) for more insights.
 
 ## Installation
 
 ```
-npm install --save-dev react-styleguidist
+cd sourcejs-project
+npm install sourcejs-react-styleguidist --save
 ```
 
-Add a `styleguide.config.js` file into your projectâ€™s root folder:
+After re-running your SourceJS app, plugin will be loaded automatically.
+
+### Important configs
+
+Configure path to components in SourceJS `options.js` file:
 
 ```javascript
+var path = require('path');
+
 module.exports = {
-	rootDir: './lib',
-	components: './components/**/*.js'
+	plugins: {
+		reactStyleguidist: {
+			rootDir: path.join(global.userPath, 'specs'),
+			components: './**/*.js'
+		}
+	}
 };
 ```
 
 See Configuration section below for the list of available options.
 
-Add these scripts to your `package.json`:
-
-```json
-"scripts": {
-  "styleguide-server": "styleguidist server",
-  "styleguide-build": "styleguidist build"
-},
-```
-
-And run `npm run styleguide-server` to start styleguide dev server.
-
 ## Documenting components
 
-Styleguidist generates documentation from 2 sources:
-
-### PropTypes and component description
-
-Components' `PropTypes` and documentation comments are parsed by the [react-docgen](https://github.com/reactjs/react-docgen) library. Have a look at [their example](https://github.com/reactjs/react-docgen#example) of a component documentation.
-
-### Usage examples and further documentation
-
-Examples are written in Markdown where any code blocks will be rendered as a react components. By default any `Readme.md` in the component folder is treated as an examples file but you can change it with the `getExampleFilename` option.
+Examples are written in Markdown where any code blocks will be rendered as a react components. By default any `readme.md` in the component folder is treated as an examples file but you can change it with the `getExampleFilename` option.
 
 ```markdown
 React component example:
 
-	<Button size="large">Push Me</Button>
+&#96;``jsx
+<Button size="large">Push Me</Button>
+&#96;``
 
 Any [Markdown](http://daringfireball.net/projects/markdown/):
 
@@ -62,14 +59,14 @@ Any [Markdown](http://daringfireball.net/projects/markdown/):
 
 ## Configuration
 
-You can change some settings in the `styleguide.config.js` file in your projectâ€™s root folder.
+Use SourceJS `options.js` for deep plugin configuration.
 
-* **`rootDir`**  
-  Type: `String`, required  
-  Your appâ€™s frontend root folder (eg. `./lib`). Should not point to a folder with the Styleguidist config and `node_modules` folder.
+* **`rootDir`**
+  Type: `String`, required
+  Your components sources root folder (eg. `./lib`). Should not point to a folder with the `node_modules` folder.
 
-* **`components`**  
-  Type: `String` or `Function`, required  
+* **`components`**
+  Type: `String` or `Function`, required
   - when `String`: a [glob pattern](https://github.com/isaacs/node-glob#glob-primer) that matches all your component modules. Relative to the `rootDir`.
   - when `Function`: function that returns an array of modules.
 
@@ -89,35 +86,15 @@ You can change some settings in the `styleguide.config.js` file in your projectâ
   },
   ```
 
-* **`styleguideDir`**  
-  Type: `String`, default: `styleguide`  
-  Folder for static HTML style guide generated with `styleguidist build` command.
-
-* **`template`**  
-  Type: `String`, default: [src/templates/index.html](src/templates/index.html)  
-  HTML file to use as the template for the output.
-
-* **`title`**  
-  Type: `String`, default: `Style guide`  
-  Style guide title.
-
-* **`serverHost`**  
-  Type: `String`, default: `localhost`  
-  Dev server host name.
-
-* **`serverPort`**  
-  Type: `Number`, default: `3000`  
-  Dev server port.
-
-* **`highlightTheme`**  
-  Type: `String`, default: `base16-light`  
+* **`highlightTheme`**
+  Type: `String`, default: `base16-light`
   [CodeMirror theme](http://codemirror.net/demo/theme.html) name to use for syntax highlighting in examples.
 
-* **`getExampleFilename`**  
-  Type: `Function`, default: finds `Readme.md` in the component folder  
+* **`getExampleFilename`**
+  Type: `Function`, default: finds `readme.md` in the component folder
   Function that returns examples file path for a given component path.
 
-  For example, instead of `Readme.md` you can use `ComponentName.examples.md`:
+  For example, instead of `readme.md` you can use `ComponentName.examples.md`:
 
   ```javascript
   getExampleFilename: function(componentpath) {
@@ -125,8 +102,8 @@ You can change some settings in the `styleguide.config.js` file in your projectâ
   }
   ```
 
-* **`updateWebpackConfig`**  
-  Type: `Function`, optional  
+* **`updateWebpackConfig`**
+  Type: `Function`, optional
   Function that allows you to modify Webpack config for style guide:
 
   ```javascript
@@ -138,42 +115,9 @@ You can change some settings in the `styleguide.config.js` file in your projectâ
   }
   ```
 
-### Config example
-
-```javascript
-module.exports = {
-	title: 'Style guide example',
-	rootDir: './example',
-	components: './**/*.js',
-	getExampleFilename: function(componentpath) {
-		return componentpath.replace(/\.js$/, '.examples.md');
-	},
-};
-```
-
-## CLI commands and options
-
-`styleguidist server`: Run dev server.
-
-`styleguidist build`: Generate a static HTML style guide.
-
-### Options
-
-* `--config`: Specify path to a config file: `styleguidist server --config dir/styleguide.config.js`.
-
-* `--verbose`: Print debug information.
-
-## Changelog
-
-The changelog can be found in the [Changelog.md](Changelog.md) file.
-
 ## Contributing
 
 Everyone is welcome to contribute. Please take a moment to review the [contributing guidelines](Contributing.md).
-
-## Author
-
-* [Artem Sapegin](http://sapegin.me)
 
 ---
 
