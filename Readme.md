@@ -9,7 +9,7 @@ Fork of React Style Guide generator [react-styleguidist](https://github.com/sape
 
 ![](https://s3.amazonaws.com/f.cl.ly/items/3i0E1D1L1c1m1s2G1d0y/Screen%20Recording%202015-09-24%20at%2009.49%20AM.gif)
 
-To add automatically generated React props docs use [sourcejs-react-docgen](https://github.com/sourcejs/sourcejs-react-docgen) plugin. Check [SourceJS React bundle example](http://github.com/sourcejs/react-styleguidist-example) for more insights.
+To add automatically generated React props docs use [sourcejs-react-docgen](https://github.com/sourcejs/sourcejs-react-docgen) plugin. Check [SourceJS React bundle example](http://github.com/sourcejs/sourcejs-react-bundle-example) for more insights.
 
 ## Installation
 
