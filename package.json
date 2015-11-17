@@ -1,7 +1,7 @@
 {
   "name": "sourcejs-react-styleguidist",
   "description": "SourceJS integration plugin for react-styleuguidist",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "homepage": "https://github.com/sourcejs/sourcejs-react-styleguidist",
   "contributirs": [
     {
