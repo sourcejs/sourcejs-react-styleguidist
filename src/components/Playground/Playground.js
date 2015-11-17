@@ -26,6 +26,11 @@ export default class Playground extends Component {
 
 	componentDidMount() {
 		this.renderEditor(this.props);
+
+		// Force fix improper editor size, TODO: invesitage the cause
+		setTimeout(() => {
+			this.renderEditor(this.props);
+		}, 1000);
 	}
 
 	componentDidUpdate() {
