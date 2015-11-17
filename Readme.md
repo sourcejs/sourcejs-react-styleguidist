@@ -25,13 +25,11 @@ After re-running your SourceJS app, plugin will be loaded automatically.
 Configure path to components in SourceJS `options.js` file:
 
 ```javascript
-var path = require('path');
-
 module.exports = {
 	plugins: {
 		reactStyleguidist: {
-			rootDir: path.join(global.userPath, 'specs'),
-			components: './**/*.js'
+			rootDir: './relative/path/to/components',
+			components: './**/*.jsx'
 		}
 	}
 };
@@ -83,10 +81,10 @@ Use SourceJS `options.js` for deep plugin configuration.
   - when `String`: a [glob pattern](https://github.com/isaacs/node-glob#glob-primer) that matches all your component modules. Relative to the `rootDir`.
   - when `Function`: function that returns an array of modules.
 
-  If your components look like `components/Button.js` or `components/Button/Button.js` or `components/Button/index.js`:
+  If your components look like `components/Button.jsx` or `components/Button/Button.jsx` or `components/Button/index.jsx`:
 
   ```javascript
-  components: './components/**/*.js',
+  components: './components/**/*.jsx'
   ```
 
   If your components look like `components/Button/Button.js` + `components/Button/index.js`:

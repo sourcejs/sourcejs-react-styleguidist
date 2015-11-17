@@ -16,11 +16,13 @@ var processRequest = function (req, res, next) {
     // Check if request is targeting Spec
     if (req.specData && req.specData.renderedHtml && req.specData.info.role !== 'navigation') {
 		var append;
+		var pathToStyleguide = config._styleguideDir.replace(/^\./, '');
+		var pathToBundle = config.bundlePath.replace(/^\./, '');
 
 		if (global.MODE === 'development') {
 			append = '<script src="/'+ config.bundlePath +'"></script>'
 		} else {
-			append = '<link rel="stylesheet" href="/build/styleguide/build/styles.css"><script src="/build/styleguide/' + config.bundlePath + '"></script>'
+			append = '<link rel="stylesheet" href="' + pathToStyleguide + '/build/styles.css"><script src="' + pathToStyleguide + pathToBundle + '"></script>'
 		}
 
 		req.specData.renderedHtml += append;

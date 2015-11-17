@@ -18,15 +18,15 @@ if (global.pathToApp) {
 
 var config = {
 	enabled: true,
-	bundlePath: 'build/bundle.js',
+	bundlePath: './build/bundle.js',
 
 	// Public object is exposed to Front-end via options API.
 	public: {},
 
 	// Original styleguidist options
-	rootDir: path.join(pathToSourceJSUser, 'specs'),
-	components: './**/*.js',
-	styleguideDir: path.join(pathToSourceJSUser, 'build/styleguide'),
+	rootDir: './specs',
+	components: './**/*.jsx',
+	styleguideDir: './build/styleguide',
 
 	highlightTheme: 'base16-light',
 	verbose: false,
@@ -58,9 +58,12 @@ function readConfig() {
 
 	options = _.merge({}, options, customConfig);
 
-	if (customConfig) {
-		options.rootDir = path.resolve(path.dirname(configFilepath), options.rootDir);
-	}
+	// Extend config
+	options._rootDir = config.rootDir;
+	options.rootDir = path.join(pathToSourceJSUser, config.rootDir);
+
+	options._styleguideDir = config.styleguideDir;
+	options.styleguideDir = path.join(pathToSourceJSUser, config.styleguideDir);
 
 	validateConfig(options);
 
