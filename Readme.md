@@ -18,6 +18,20 @@ cd sourcejs-project
 npm install sourcejs-react-styleguidist --save
 ```
 
+Add custom markdown renderer conf into SourceJS `options.js` file:
+
+```javascript
+module.exports = {
+	core: {
+        processMd: {
+            languageRenderers: {
+                jsx: require('sourcejs-react-styleguidist/core/lang-jsx').processExample
+            }
+        }
+    }
+};
+```
+
 After re-running your SourceJS app, plugin will be loaded automatically.
 
 ### Important configs
