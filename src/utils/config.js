@@ -54,16 +54,15 @@ function readConfig() {
 
 	if (configFilepath) {
 		customConfig = require(configFilepath);
+		options = _.merge({}, options, customConfig);
+		options.rootDir = path.resolve(path.dirname(configFilepath), options.rootDir);
+	} else {
+		options._rootDir = config.rootDir;
+		options.rootDir = path.join(pathToSourceJSUser, options.rootDir);
+
+		options._styleguideDir = config.styleguideDir;
+		options.styleguideDir = path.join(pathToSourceJSUser, options.styleguideDir);
 	}
-
-	options = _.merge({}, options, customConfig);
-
-	// Extend config
-	options._rootDir = config.rootDir;
-	options.rootDir = path.join(pathToSourceJSUser, config.rootDir);
-
-	options._styleguideDir = config.styleguideDir;
-	options.styleguideDir = path.join(pathToSourceJSUser, config.styleguideDir);
 
 	validateConfig(options);
 
