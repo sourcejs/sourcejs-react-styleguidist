@@ -19,10 +19,10 @@ var processRequest = function (req, res, next) {
 		var pathToStyleguide = config._styleguideDir.replace(/^\./, '');
 		var pathToBundle = config.bundlePath.replace(/^\./, '');
 
-		if (global.MODE === 'development') {
-			append = '<script src="/'+ config.bundlePath +'"></script>'
-		} else {
+		if (global.MODE === 'production') {
 			append = '<link rel="stylesheet" href="' + pathToStyleguide + '/build/styles.css"><script src="' + pathToStyleguide + pathToBundle + '"></script>'
+		} else {
+			append = '<script src="'+ pathToBundle +'"></script>'
 		}
 
 		req.specData.renderedHtml += append;

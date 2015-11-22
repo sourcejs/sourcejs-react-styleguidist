@@ -3,7 +3,7 @@
   "description": "SourceJS integration plugin for react-styleuguidist",
   "version": "0.3.2",
   "homepage": "https://github.com/sourcejs/sourcejs-react-styleguidist",
-  "contributirs": [
+  "contributors": [
     {
       "name": "Artem Sapegin",
       "url": "http://sapegin.me/"

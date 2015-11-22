@@ -60,8 +60,6 @@ function foo(bar, fum) {
 - Don’t commit generated files: compiled from Stylus CSS, minified JavaScript, etc.
 - Don’t change version number and changelog.
 - Install [EditorConfig](http://editorconfig.org/) plugin for your code editor.
-- Feel free to [ask me](http://sapegin.me) anything you need.
-
 
 ## Building and running tests
 

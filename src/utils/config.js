@@ -11,7 +11,7 @@ var pathToSourceJSUser = '';
 
 if (global.pathToApp) {
 	sourceJSUtils = require(path.join(global.pathToApp, 'core/lib/utils'));
-	globalConfig = global.opts.plugins && global.opts.plugins.reactStyleguidist ? global.opts.plugins.reactStyleguidist : {};
+	globalConfig = global.opts && global.opts.plugins && global.opts.plugins.reactStyleguidist ? global.opts.plugins.reactStyleguidist : {};
 
 	pathToSourceJSUser = global.userPath;
 }
@@ -57,7 +57,6 @@ function readConfig() {
 		options = _.merge({}, options, customConfig);
 		options.rootDir = path.resolve(path.dirname(configFilepath), options.rootDir);
 	} else {
-		options._rootDir = config.rootDir;
 		options.rootDir = path.join(pathToSourceJSUser, options.rootDir);
 
 		options._styleguideDir = config.styleguideDir;
@@ -73,10 +72,10 @@ function readConfig() {
 	}
 
 	if (options.rootDir === global.userPath) {
-		throw Error('Styleguidist: "rootDir" should not point to folder with node_modules');
+		throw Error('ReactStyleguidist: "rootDir" should not point to folder with node_modules');
 	}
 	if (!utils.isDirectoryExists(options.rootDir)) {
-		throw Error('Styleguidist: "rootDir" directory not found: ' + options.rootDir);
+		throw Error('ReactStyleguidist: "rootDir" directory not found: ' + options.rootDir);
 	}
 
 	return options;
@@ -97,16 +96,16 @@ function findConfig(argv) {
 
 function validateConfig(options) {
 	if (!options.rootDir) {
-		throw Error('Styleguidist: "rootDir" options is required.');
+		throw Error('ReactStyleguidist: "rootDir" options is required.');
 	}
 	if (!options.components) {
-		throw Error('Styleguidist: "components" options is required.');
+		throw Error('ReactStyleguidist: "components" options is required.');
 	}
 	if (options.getExampleFilename && typeof options.getExampleFilename !== 'function') {
-		throw Error('Styleguidist: "getExampleFilename" options must be a function.');
+		throw Error('ReactStyleguidist: "getExampleFilename" options must be a function.');
 	}
 	if (options.updateWebpackConfig && typeof options.updateWebpackConfig !== 'function') {
-		throw Error('Styleguidist: "updateWebpackConfig" options must be a function.');
+		throw Error('ReactStyleguidist: "updateWebpackConfig" options must be a function.');
 	}
 }
 

@@ -69,9 +69,9 @@ Examples are written in Markdown where any code blocks will be rendered as a rea
 
 ## How it works
 
-SourceJS plugins are loaded together with main applications, adding additional initialization steps or changing rendering flow using middleware integration. With this plugin, in development mode, SourceJS in enhanced with webpack middleware, that builds all the React examples on demand and listens to file changes for hot-reloading.
+SourceJS plugins are loaded together with main application, adding additional initialization steps or changing rendering flow using middleware integration. With this plugin, in development mode, SourceJS in enhanced with webpack middleware, that builds all the React examples on demand and listens to file changes for hot-reloading.
 
-Running app with `NODE_ENV=production`, webpack will be triggered only once to build a static, minified version, which is done also on app start.
+In production mode webpack is not triggered, expecting that bundle is already built (read configuration section for more).
 
 Rendering flow with this plugins looks like this:
 
@@ -85,6 +85,14 @@ Rendering flow with this plugins looks like this:
 ## Configuration
 
 Use SourceJS `options.js` for deep plugin configuration.
+
+* **`enabled`**
+  Type: `Boolean`
+  Set to `false`, if wan't to disable plugin load with SourceJS app.
+
+* **`preBuild`**
+  Type: `Boolean`
+  Set to `true`, if you wan't to automatically build webpack bundle in production mode right after app starts.
 
 * **`rootDir`**
   Type: `String`, required
@@ -140,12 +148,25 @@ Use SourceJS `options.js` for deep plugin configuration.
   }
   ```
 
+### Environment settings
+
+Running app with `NODE_ENV=production`, initial webpack build won't be triggered. To properly prepare production environment, first run react-styleguidist build command, and only after that run application:
+
+```
+NODE_ENV=production node ./node_modules/sourcejs-react-styleguidist/core/build.js
+NODE_ENV=production npm start
+```
+
+Note: this command should be ran from SourceJS root folder, where `node_modules` is placed.
+
+Alternatively, you can set `preBuild` to true in plugin configuration, to build webpack bundle once app is ran in production mode. This will require less build steps, but may cause higher load in production environment container.
+
 ## Contributing
 
-Everyone is welcome to contribute. Please take a moment to review the [contributing guidelines](Contributing.md).
+Everyone is welcome to contribute. Please take a moment to review the [contributing guidelines](contributing.md).
 
 ---
 
 ## License
 
-The MIT License, see the included [License.md](License.md) file.
+The MIT License, see the included [license.md](license.md) file.
