@@ -39,11 +39,13 @@ module.exports.pitch = function() {
 		console.log();
 	}
 
-	var specPah;
+	var specPath;
 	var specId;
 	var components = componentSources.map(function(item){
-		specPah = config.getExampleFilename(item);
-		specId = path.dirname(specPah.replace(global.userPath, '')).replace(/^\//, '').toLowerCase();
+		specPath = config.getExampleFilename(item);
+
+		specId = path.dirname(specPath.replace(global.userPath, '')).replace(/\\/g, '/');
+		specId = specId.replace(/^\//, '').toLowerCase();
 
 		return '"' + specId + '":' + processComponent(item);
 	});
