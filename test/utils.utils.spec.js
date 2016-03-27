@@ -15,7 +15,7 @@ describe('utils', () => {
 					module: {name: 'Bar'}
 				}
 			]);
-			expect(_.pluck(result, 'name')).to.eql(['Foo', 'Bar']);
+			expect(_.map(result, 'name')).to.eql(['Foo', 'Bar']);
 		});
 	});
 
