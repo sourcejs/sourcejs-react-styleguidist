@@ -16,10 +16,8 @@ module.exports = function(env) {
 	}
 
 	var reactTransformPath = path.join(__dirname, '../../babel-plugin-react-transform');  // npm 3
-	var reactDisplayNamePath = path.join(__dirname, '../../babel-plugin-react-display-name');  // npm 3
 	if (!fs.existsSync(reactTransformPath)) {
 		reactTransformPath = path.resolve(__dirname, '../node_modules/babel-plugin-react-transform');  // npm 2 or react-styleguidist develop
-		reactDisplayNamePath = path.resolve(__dirname, '../node_modules/babel-plugin-react-display-name');  // npm 2 or react-styleguidist develop
 	}
 
 	var includes = [
@@ -147,7 +145,6 @@ module.exports = function(env) {
 						query: {
 							stage: 0,
 							plugins: [
-								reactDisplayNamePath,
 								reactTransformPath
 							],
 							extra: {
