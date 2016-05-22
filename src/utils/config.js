@@ -56,7 +56,8 @@ function readConfig() {
 		customConfig = require(configFilepath);
 		options = _.merge({}, options, customConfig);
 		options.rootDir = path.resolve(path.dirname(configFilepath), options.rootDir);
-	} else {
+	}
+	else {
 		options.rootDir = path.join(pathToSourceJSUser, options.rootDir);
 
 		options._styleguideDir = config.styleguideDir;

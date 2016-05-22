@@ -3,7 +3,8 @@ var marked = require('marked');
 
 var evalPlaceholder = '<%{#eval#}%>';
 
-var requireAnythingRegex = /require\s*\(([^)]+)\)/g;
+var requireAnythingTest = 'require\\s*\\(([^)]+)\\)';
+var requireAnythingRegex = new RegExp(requireAnythingTest, 'g');
 var simpleStringRegex = /^"([^"]+)"$|^'([^']+)'$/;
 
 function readExamples(markdown) {
@@ -74,6 +75,7 @@ function examplesLoader(source, map) {
 }
 
 _.assign(examplesLoader, {
+	requireAnythingTest: requireAnythingTest,
 	requireAnythingRegex: requireAnythingRegex,
 	simpleStringRegex: simpleStringRegex,
 	readExamples: readExamples,
