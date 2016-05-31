@@ -13,16 +13,16 @@ export default class Button extends Component {
 		children: PropTypes.string.isRequired,
 		color: PropTypes.string,
 		size: PropTypes.oneOf(['small', 'normal', 'large']),
-	}
+	};
 	static defaultProps = {
 		color: '#333',
 		size: 'normal'
-	}
+	};
 	static sizes = {
 		small: '10px',
 		normal: '14px',
 		large: '18px'
-	}
+	};
 
 	render() {
 		let styles = {

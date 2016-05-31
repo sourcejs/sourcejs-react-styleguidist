@@ -4,7 +4,6 @@ import 'codemirror/lib/codemirror.css';
 
 import _ from 'lodash';
 import { Component, PropTypes } from 'react';
-import debounce from 'lodash/function/debounce';
 import Codemirror from 'react-codemirror';
 
 import s from './Editor.css';
@@ -30,7 +29,7 @@ export default class Editor extends Component {
 
 	constructor() {
 		super();
-		this._handleChange = debounce(this.handleChange.bind(this), UPDATE_DELAY);
+		this._handleChange = _.debounce(this.handleChange.bind(this), UPDATE_DELAY);
 	}
 
 	componentWillMount() {

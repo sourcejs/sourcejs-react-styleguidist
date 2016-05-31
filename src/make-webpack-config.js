@@ -15,13 +15,6 @@ module.exports = function(env) {
 		codeMirrorPath = path.join(__dirname, '../node_modules/codemirror');  // npm 2 or react-styleguidist develop
 	}
 
-	var reactTransformPath = path.join(__dirname, '../../babel-plugin-react-transform');  // npm 3
-	var reactDisplayNamePath = path.join(__dirname, '../../babel-plugin-react-display-name');  // npm 3
-	if (!fs.existsSync(reactTransformPath)) {
-		reactTransformPath = path.resolve(__dirname, '../node_modules/babel-plugin-react-transform');  // npm 2 or react-styleguidist develop
-		reactDisplayNamePath = path.resolve(__dirname, '../node_modules/babel-plugin-react-display-name');  // npm 2 or react-styleguidist develop
-	}
-
 	var includes = [
 		__dirname,
 		config.rootDir
@@ -61,7 +54,7 @@ module.exports = function(env) {
 			loaders: [
 			],
 			noParse: [
-				/babel-core\/browser.js/
+				/babel-standalone/
 			]
 		},
 		postcss: function() {
@@ -101,10 +94,7 @@ module.exports = function(env) {
 					{
 						test: /\.jsx?$/,
 						include: includes,
-						loader: 'babel',
-						query: {
-							stage: 0
-						}
+						loader: 'babel'
 					},
 					{
 						test: /\.css$/,
@@ -143,29 +133,7 @@ module.exports = function(env) {
 					{
 						test: /\.jsx?$/,
 						include: includes,
-						loader: 'babel',
-						query: {
-							stage: 0,
-							plugins: [
-								reactDisplayNamePath,
-								reactTransformPath
-							],
-							extra: {
-								'react-transform': {
-									transforms: [
-										{
-											transform: 'react-transform-hmr',
-											imports: ['react'],
-											locals: ['module']
-										},
-										{
-											transform: 'react-transform-catch-errors',
-											imports: ['react', 'redbox-react']
-										}
-									]
-								}
-							}
-						}
+						loader: 'babel'
 					},
 					{
 						test: /\.css$/,
